@@ -1,0 +1,14 @@
+{
+  "appId": "com.timetrack.app",
+  "appName": "TimeTrack",
+  "webDir": "dist",
+  "server": {
+    "cleartext": true,
+    "androidScheme": "http"
+  },
+  "plugins": {
+    "CapacitorHttp": {
+      "enabled": true
+    }
+  }
+}

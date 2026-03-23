@@ -1,0 +1,122 @@
+﻿
+> Configure project :app
+WARNING: Using flatDir should be avoided because it doesn't support any meta-data formats.
+
+> Configure project :capacitor-cordova-android-plugins
+WARNING: Using flatDir should be avoided because it doesn't support any meta-data formats.
+WARNING: We recommend using a newer Android Gradle plugin to use compileSdk = 36
+
+This Android Gradle plugin (8.5.2) was tested up to compileSdk = 34.
+
+You are strongly encouraged to update your project to use a newer
+Android Gradle plugin that has been tested with compileSdk = 36.
+
+If you are already using the latest version of the Android Gradle plugin,
+you may need to wait until a newer version with support for compileSdk = 36 is available.
+
+For more information refer to the compatibility table:
+https://d.android.com/r/tools/api-level-support
+
+To suppress this warning, add/update
+    android.suppressUnsupportedCompileSdk=36
+to this project's gradle.properties.
+
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :app:javaPreCompileDebug UP-TO-DATE
+> Task :capacitor-android:preBuild UP-TO-DATE
+> Task :capacitor-android:preDebugBuild UP-TO-DATE
+> Task :capacitor-android:writeDebugAarMetadata UP-TO-DATE
+> Task :capacitor-cordova-android-plugins:preBuild UP-TO-DATE
+> Task :capacitor-cordova-android-plugins:preDebugBuild UP-TO-DATE
+> Task :capacitor-cordova-android-plugins:writeDebugAarMetadata UP-TO-DATE
+> Task :app:generateDebugResValues UP-TO-DATE
+> Task :capacitor-android:generateDebugResValues UP-TO-DATE
+> Task :capacitor-android:generateDebugResources UP-TO-DATE
+> Task :capacitor-android:packageDebugResources UP-TO-DATE
+> Task :capacitor-cordova-android-plugins:generateDebugResValues UP-TO-DATE
+> Task :capacitor-cordova-android-plugins:generateDebugResources UP-TO-DATE
+> Task :app:checkDebugAarMetadata FAILED
+> Task :capacitor-cordova-android-plugins:packageDebugResources UP-TO-DATE
+.\gradlew : 
+At line:1 char:63
++ ... id\Android Studio\jbr"; 
+.\gradlew assembleDebug > 
+gradle_out.txt 2>&1
++                             
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
+    + CategoryInfo          : 
+    NotSpecified: (:String)   
+  [], RemoteException
+    + FullyQualifiedErrorId : 
+    NativeCommandError
+ 
+FAILURE: Build failed with an 
+exception.
+
+* What went wrong:
+Execution failed for task 
+':app:checkDebugAarMetadata'.
+> A failure occurred while 
+executing com.android.build.gr
+adle.internal.tasks.CheckAarMe
+tadataWorkAction
+   > 4 issues were found when 
+checking AAR metadata:
+     
+       1.  Dependency 'android
+x.core:core-splashscreen:1.2.0
+' requires Android Gradle 
+plugin 8.6.0 or higher.
+     
+           This build 
+currently uses Android Gradle 
+plugin 8.5.2.
+     
+       2.  Dependency 'android
+x.activity:activity:1.11.0' 
+requires Android Gradle 
+plugin 8.9.1 or higher.
+     
+           This build 
+currently uses Android Gradle 
+plugin 8.5.2.
+     
+       3.  Dependency 'android
+x.core:core-ktx:1.17.0' 
+requires Android Gradle 
+plugin 8.9.1 or higher.
+     
+           This build 
+currently uses Android Gradle 
+plugin 8.5.2.
+     
+       4.  Dependency 
+'androidx.core:core:1.17.0' 
+requires Android Gradle 
+plugin 8.9.1 or higher.
+     
+           This build 
+currently uses Android Gradle 
+plugin 8.5.2.
+
+* Try:
+> Run with --stacktrace 
+option to get the stack trace.
+> Run with --info or --debug 
+option to get more log output.
+> Run with --scan to get full 
+insights.
+> Get more help at 
+https://help.gradle.org.
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.7/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 2s
+11 actionable tasks: 1 executed, 10 up-to-date
