@@ -315,6 +315,30 @@ app.get('/api/notifications', authenticateToken, async (req, res) => {
     }
 });
 
+// Helper: upload a base64 photo to Firebase Storage and return its public URL
+async function uploadPhotoToStorage(base64DataUrl, folder) {
+    if (!base64DataUrl) return null;
+    try {
+        const bucket = admin.storage().bucket();
+        const matches = base64DataUrl.match(/^data:(.+);base64,(.+)$/);
+        let mimeType = 'image/jpeg';
+        let base64Data = base64DataUrl;
+        if (matches) {
+            mimeType = matches[1];
+            base64Data = matches[2];
+        }
+        const buffer = Buffer.from(base64Data, 'base64');
+        const fileName = `${folder}/${Date.now()}-${Math.random().toString(36).substr(2, 9)}.jpg`;
+        const file = bucket.file(fileName);
+        await file.save(buffer, { contentType: mimeType, resumable: false });
+        await file.makePublic();
+        return file.publicUrl();
+    } catch (e) {
+        console.error('Photo upload failed:', e.message);
+        return null; // Non-fatal: allow check-in/out to succeed even if photo upload fails
+    }
+}
+
 app.post('/api/attendance/checkin', authenticateToken, async (req, res) => {
     try {
         const userId = String(req.user.id);
@@ -352,6 +376,9 @@ app.post('/api/attendance/checkin', authenticateToken, async (req, res) => {
         else if (hour >= 14 && hour < 22) shiftTime = 'Evening';
         else if (hour >= 22 || hour < 6) shiftTime = 'Night';
 
+        // Upload selfie to Firebase Storage (avoids Firestore 1MB document limit)
+        const photo_in_url = await uploadPhotoToStorage(photo_in, `attendance/checkin/${userId}`);
+
         const result = await db.collection('attendance').add({
             user_id: userId,
             check_in: timestamp,
@@ -360,7 +387,7 @@ app.post('/api/attendance/checkin', authenticateToken, async (req, res) => {
             longitude,
             ip_address,
             device_id: device_id || 'Browser/Unknown',
-            photo_in: photo_in || null,
+            photo_in: photo_in_url,
             in_geofence,
             shift_timing: shiftTime,
             status: isLate ? 'Late Entry' : 'Present'
@@ -436,10 +463,13 @@ app.post('/api/attendance/checkout', authenticateToken, async (req, res) => {
             overtime = totalHours - STANDARD_SHIFT;
         }
 
+        // Upload selfie to Firebase Storage (avoids Firestore 1MB document limit)
+        const photo_out_url = await uploadPhotoToStorage(photo_out, `attendance/checkout/${userId}`);
+
         await db.collection('attendance').doc(attendanceId).update({
             check_out: timestamp,
             location_out: JSON.stringify({ latitude, longitude }),
-            photo_out: photo_out || null,
+            photo_out: photo_out_url,
             checkout_device_id: device_id || 'Browser/Unknown',
             total_hours: parseFloat(totalHours.toFixed(2)),
             overtime_hours: parseFloat(overtime.toFixed(2)),
