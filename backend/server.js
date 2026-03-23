@@ -918,19 +918,14 @@ app.put('/api/admin/user/:id/toggle-slip', authenticateToken, isSuperAdmin, asyn
         res.status(500).json({ error: err.message });
     }
 });
-// Serve Static frontend
-app.use(express.static(path.join(__dirname, '../web-dashboard/dist')));
 
-app.use((req, res) => {
-    if (!req.path.startsWith('/api')) {
-        res.sendFile(path.join(__dirname, '../web-dashboard/dist/index.html'));
-    } else {
-        res.status(404).json({ error: 'API route not found' });
-    }
-});
+// Local development server (Vercel ignores this and uses module.exports below)
+if (process.env.NODE_ENV !== 'production') {
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, '0.0.0.0', () => {
+        console.log(`Server is running on port ${PORT}`);
+    });
+}
 
-// Initialization
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+// Export for Vercel serverless
+module.exports = app;
